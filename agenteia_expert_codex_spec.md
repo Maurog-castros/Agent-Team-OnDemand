@@ -551,25 +551,49 @@ workspaces/agents/<agent_slug>/
 └── artifacts/
 ```
 
-El equipo debe tener espacio compartido:
+Cada proyecto debe tener un espacio compartido. Cada reunión debe conservar sus
+participantes y minuta en una carpeta propia:
 
 ```txt
-workspaces/shared/<team_slug>/
+workspaces/shared/<project_slug>/
 ├── README.md
 ├── backlog.md
 ├── meetings/
-│   └── YYYY-MM-DD-daily.md
+│   └── YYYY-MM-DD_HH-mm--<meeting_slug>/
+│       ├── participantes.md
+│       └── minuta.md
 ├── decisions/
 ├── architecture/
 ├── tasks/
 └── artifacts/
 ```
 
+Ejemplo:
+
+```txt
+workspaces/shared/agenteia-expert/meetings/2026-06-21_09-00--daily-scrum/
+├── participantes.md
+└── minuta.md
+```
+
+Reglas de nombres:
+
+- `project_slug` y `meeting_slug` deben usar minúsculas, números y guiones.
+- La fecha y hora deben usar `YYYY-MM-DD_HH-mm` en `America/Santiago`.
+- No usar `:` en nombres de archivos o carpetas para mantener compatibilidad
+  entre Ubuntu, Windows y volúmenes Docker.
+- `participantes.md` registra identidad, rol, asistencia y canal de cada
+  participante.
+- `minuta.md` contiene desafío, avances, bloqueos, decisiones, tareas, riesgos
+  y próximos pasos.
+
 Reglas:
 
 - Los agentes pueden escribir en su workspace personal.
-- Todos los agentes pueden leer el workspace compartido.
+- Todos los agentes asignados al proyecto pueden leer su workspace compartido.
 - Solo ScrumMasterProjectManager y AgenteIA Expert pueden cerrar minutas oficiales.
+- Una minuta cerrada no se sobrescribe; cualquier corrección crea una nueva
+  versión auditada.
 - Las decisiones arquitectónicas deben guardarse como ADRs en `architecture/adr-XXXX.md`.
 
 ---
