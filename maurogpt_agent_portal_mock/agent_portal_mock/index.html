@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MauroGPT Plus · Agent Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-small">
+        <div class="mini-orb"></div>
+        <span>MauroGPT Plus</span>
+      </div>
+
+      <button class="new-chat">＋ Nuevo chat</button>
+
+      <nav class="nav-section">
+        <a class="nav-item active" href="#">⌕ Buscar chats</a>
+        <a class="nav-item" href="#">▥ Biblioteca</a>
+        <a class="nav-item" href="#">◉ Programación</a>
+        <a class="nav-item" href="#">✣ Aplicaciones</a>
+        <a class="nav-item" href="#">⋯ Más</a>
+      </nav>
+
+      <div class="group-title">Anclado</div>
+      <nav class="nav-section compact">
+        <a class="nav-item" href="#">🔎 Búsqueda-Trabajo</a>
+        <a class="nav-item" href="#">💎 H-L-Miko PHP</a>
+        <a class="nav-item" href="#">🧪 DevSecOps</a>
+      </nav>
+
+      <div class="group-title">Proyectos</div>
+      <nav class="nav-section compact">
+        <a class="nav-item project-active" href="#">🧠 LLMs - MLOps - AIOps</a>
+        <a class="nav-item" href="#">📁 Autoconocimiento</a>
+        <a class="nav-item" href="#">⚖️ Política</a>
+        <a class="nav-item" href="#">📣 Venta Agentes IA</a>
+        <a class="nav-item" href="#">🎮 Gaming</a>
+        <a class="nav-item subtle" href="#">Ver más</a>
+      </nav>
+
+      <div class="group-title">Chats</div>
+      <nav class="nav-section compact chats">
+        <a class="nav-item" href="#">Instalar Ubuntu en Laptop</a>
+        <a class="nav-item unread" href="#">Resumen Diario Tech</a>
+        <a class="nav-item" href="#">Plugin opencode-snip función</a>
+        <a class="nav-item" href="#">Significado reinicio límite uso</a>
+        <a class="nav-item" href="#">Intención del diagrama</a>
+      </nav>
+
+      <div class="profile">
+        <div class="avatar">M</div>
+        <div>
+          <strong>Mauro</strong>
+          <span>Plus</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dashboard">
+      <header class="topbar">
+        <div class="brand">
+          <div class="orb">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <h1>MauroGPT PLus</h1>
+            <p>Dashboard</p>
+          </div>
+        </div>
+
+        <div class="status-pill">
+          <span class="dot"></span>
+          Agentes online
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-logo" aria-hidden="true">
+          <div class="ring">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="swirl">✺</div>
+        </div>
+
+        <div class="hero-content">
+          <h2>Listo cuando tú lo estés.</h2>
+          <div class="prompt-bar">
+            <button>＋</button>
+            <input id="promptInput" type="text" placeholder="Preguntar lo que quieras" />
+            <select id="agentSelect" aria-label="Seleccionar agente">
+              <option>Instantánea</option>
+              <option>AgenteIA Expert</option>
+              <option>FullStack</option>
+              <option>DevOps</option>
+              <option>Scrum Master</option>
+            </select>
+            <button class="mic">🎙</button>
+            <button id="sendPrompt" class="send">↗</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="agent-grid" id="agentGrid"></section>
+
+      <section class="workspace">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Daily Scrum · Lunes a viernes · 09:00 - 10:00</h3>
+            <span>Mock Telegram Group</span>
+          </div>
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Workspace compartido</h3>
+            <span>/workspace/shared</span>
+          </div>
+          <div class="tasks" id="tasks"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./mock-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
