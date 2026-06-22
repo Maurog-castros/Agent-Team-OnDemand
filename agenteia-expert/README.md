@@ -6,8 +6,8 @@ runtime desacoplado mediante un adapter.
 
 ## Estado
 
-Primera fase: scaffold backend ejecutable con FastAPI, PostgreSQL, Redis,
-SQLAlchemy async y contratos para agentes, tools, canales y reuniones.
+Backend ejecutable con FastAPI, PostgreSQL, Redis y portal React/Vite en
+`frontend/` con ocho vistas operativas.
 
 ## Inicio local
 
@@ -15,11 +15,22 @@ SQLAlchemy async y contratos para agentes, tools, canales y reuniones.
 cp .env.example .env
 docker compose up --build
 curl http://localhost:8080/health
+curl http://localhost:8081/
 ```
 
-La documentación OpenAPI queda disponible en `http://localhost:8080/docs`.
+Portal: `http://localhost:8081` · API: `http://localhost:8080/docs`
 
-## Desarrollo
+## Portal frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Ver [`frontend/README.md`](./frontend/README.md) para lint, tests, Docker y K3s.
+
+## Desarrollo backend
 
 ```bash
 python -m venv .venv
@@ -37,8 +48,8 @@ En Windows PowerShell use `.venv\Scripts\Activate.ps1`.
 - Modelo: `auto-hermes`
 - API key: solo mediante `LLM_API_KEY`; nunca en Git, logs o base de datos.
 
-## Límites de esta fase
+## Límites actuales
 
-- El portal React/Vite se implementará después de aprobar su concepto visual.
+- Chat web usa respuestas locales hasta conectar runtime Hermes vía FastAPI.
 - Los gateways Telegram permanecen deshabilitados hasta configurar tokens.
 - Las tools con efectos externos parten denegadas o requieren aprobación.

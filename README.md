@@ -127,13 +127,15 @@ Estado pendiente:
 El scaffold inicial vive en [`agenteia-expert/`](./agenteia-expert/). Incluye:
 
 - FastAPI con routers de health, agentes, equipos, reuniones y tareas.
+- Portal React/Vite con chat, dashboard, agentes, workspaces, reuniones, tareas,
+  herramientas/políticas y sistema/observabilidad.
 - SQLAlchemy async, repositorios y migración inicial Alembic.
 - Servicios para workspaces, memoria, LLM, scheduler y Scrum secuencial.
 - Contratos para runtime Hermes, tools, MCP y Telegram.
 - Workspaces iniciales personales y compartidos.
-- Dockerfile, Docker Compose, scripts Ubuntu y configuración sin secretos.
+- Dockerfile, Docker Compose, manifiestos K3s y scripts Ubuntu sin secretos.
 
-Validación de esta fase:
+Validación backend:
 
 ```bash
 cd agenteia-expert
@@ -144,6 +146,15 @@ uv pip install --python .venv/bin/python -e '.[dev]'
 .venv/bin/pytest
 ```
 
-El portal visual React/Vite se implementará en la siguiente fase después de
-aprobar su concepto de diseño. `app/channels/web/placeholder.py` marca ese límite
-sin mezclar todavía UI con lógica de dominio.
+Validación portal:
+
+```bash
+cd agenteia-expert/frontend
+npm install
+npm run lint
+npm run test
+npm run build
+```
+
+El portal se conecta progresivamente a FastAPI (`/api` en dev, nginx proxy en
+producción). Nunca expone `LLM_API_KEY` en la UI.
