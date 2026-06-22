@@ -121,3 +121,29 @@ Estado pendiente:
 - Falta personalizar `SOUL.md`, tools y permisos de cada profile.
 - Falta asociar workspaces personales y compartidos del proyecto.
 - Falta instalar servicios `systemd --user` para operación persistente.
+
+## Control plane `agenteia-expert`
+
+El scaffold inicial vive en [`agenteia-expert/`](./agenteia-expert/). Incluye:
+
+- FastAPI con routers de health, agentes, equipos, reuniones y tareas.
+- SQLAlchemy async, repositorios y migración inicial Alembic.
+- Servicios para workspaces, memoria, LLM, scheduler y Scrum secuencial.
+- Contratos para runtime Hermes, tools, MCP y Telegram.
+- Workspaces iniciales personales y compartidos.
+- Dockerfile, Docker Compose, scripts Ubuntu y configuración sin secretos.
+
+Validación de esta fase:
+
+```bash
+cd agenteia-expert
+uv venv --python 3.11 .venv
+uv pip install --python .venv/bin/python -e '.[dev]'
+.venv/bin/ruff check .
+.venv/bin/mypy app
+.venv/bin/pytest
+```
+
+El portal visual React/Vite se implementará en la siguiente fase después de
+aprobar su concepto de diseño. `app/channels/web/placeholder.py` marca ese límite
+sin mezclar todavía UI con lógica de dominio.
