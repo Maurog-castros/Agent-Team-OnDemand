@@ -1,5 +1,8 @@
 import type {
   AgentRead,
+  ChatRequest,
+  ChatResponse,
+  HealthDepsResponse,
   HealthResponse,
   MeetingRead,
   TaskRead,
@@ -45,8 +48,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   health: () => request<HealthResponse>('/health'),
+  healthDeps: () => request<HealthDepsResponse>('/health/deps'),
   listAgents: () => request<AgentRead[]>('/agents'),
   listTasks: () => request<TaskRead[]>('/tasks'),
   listTeams: () => request<TeamRead[]>('/teams'),
   getMeeting: (id: string) => request<MeetingRead>(`/meetings/${id}`),
+  sendChat: (slug: string, payload: ChatRequest) =>
+    request<ChatResponse>(`/agents/${encodeURIComponent(slug)}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }),
 }

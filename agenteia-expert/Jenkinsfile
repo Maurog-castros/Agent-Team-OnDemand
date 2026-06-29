@@ -1,0 +1,109 @@
+pipeline {
+  agent any
+
+  options {
+    ansiColor('xterm')
+    timestamps()
+    timeout(time: 25, unit: 'MINUTES')
+    buildDiscarder(logRotator(numToKeepStr: '30', daysToKeepStr: '30'))
+    disableConcurrentBuilds()
+  }
+
+  parameters {
+    choice(
+      name: 'GIT_BRANCH',
+      choices: ['main'],
+      description: 'Rama a desplegar'
+    )
+    booleanParam(
+      name: 'RUN_TESTS',
+      defaultValue: true,
+      description: 'Ejecutar tests frontend y backend antes del deploy'
+    )
+    booleanParam(
+      name: 'EXPAND_CERT',
+      defaultValue: false,
+      description: 'Ampliar certificado TLS DMZ (solo si agregas un subdominio nuevo)'
+    )
+  }
+
+  environment {
+    DEPLOY_HOST = '172.17.0.1'
+    DEPLOY_USER = 'mauro'
+    DEPLOY_PATH = '/home/mauro/Dev/Agent-Team-OnDemand/agenteia-expert'
+    SKIP_CERT_EXPAND = "${params.EXPAND_CERT ? '0' : '1'}"
+    PUBLIC_URL = 'https://team.maurocastro.cl'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout([
+          $class: 'GitSCM',
+          branches: [[name: "*/${params.GIT_BRANCH}"]],
+          userRemoteConfigs: [[
+            url: 'https://github.com/Maurog-castros/Agent-Team-OnDemand.git'
+          ]]
+        ])
+        sh 'git rev-parse HEAD && ls -la agenteia-expert/scripts/'
+      }
+    }
+
+    stage('Tests') {
+      when {
+        expression { return params.RUN_TESTS }
+      }
+      steps {
+        dir('agenteia-expert/frontend') {
+          sh '''
+            set -eu
+            docker run --rm -v "$PWD:/app" -w /app node:22-alpine sh -c "npm ci && npm test"
+          '''
+        }
+        dir('agenteia-expert') {
+          sh '''
+            set -eu
+            python3 -m venv .venv-ci
+            . .venv-ci/bin/activate
+            pip install -q -e ".[dev]"
+            pytest -q
+          '''
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        withEnv(["EXPAND_CERT=${params.EXPAND_CERT ? '1' : '0'}"]) {
+          sh '''
+            set -eu
+            chmod +x agenteia-expert/scripts/jenkins-deploy.sh
+            agenteia-expert/scripts/jenkins-deploy.sh
+          '''
+        }
+      }
+    }
+
+    stage('Smoke') {
+      steps {
+        sh '''
+          set -eu
+          curl -fsS -o /dev/null -w "GET / → %{http_code}\\n" "${PUBLIC_URL}/"
+          curl -fsS -o /dev/null -w "GET /chat → %{http_code}\\n" "${PUBLIC_URL}/chat"
+          curl -fsS -o /dev/null -w "GET /reunion → %{http_code}\\n" "${PUBLIC_URL}/reunion"
+          curl -fsS "${PUBLIC_URL}/api/health"
+          echo
+        '''
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Deploy OK → ${PUBLIC_URL}"
+    }
+    failure {
+      echo 'Deploy falló. Revisa logs y servicios: systemctl --user status agenteia-api agenteia-portal'
+    }
+  }
+}

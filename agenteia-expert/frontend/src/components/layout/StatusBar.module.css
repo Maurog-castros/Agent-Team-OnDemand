@@ -1,0 +1,114 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--status-bar-height);
+  padding: 0 1rem 0 1.25rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.services {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.service {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  padding: 0 0.7rem;
+}
+
+.divider {
+  width: 1px;
+  height: 1rem;
+  background: var(--color-border);
+  margin-right: 0.7rem;
+}
+
+.serviceIcon {
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+}
+
+.serviceName {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.serviceDetail {
+  color: var(--color-text-dim);
+}
+
+.statusOk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+.statusCheck {
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.statusWarn {
+  color: var(--color-warning);
+  font-weight: 500;
+}
+
+.latency {
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.detailLink {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.detailLink:hover {
+  color: var(--color-text);
+}
+
+.detailLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1100px) {
+  .serviceDetail,
+  .latency {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .detailLink span:last-child {
+    display: none;
+  }
+
+  .detailLink {
+    font-size: 0.68rem;
+  }
+
+  .serviceIcon {
+    display: none;
+  }
+}

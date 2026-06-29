@@ -14,6 +14,18 @@ npm run dev
 Abrir `http://localhost:5173`. Las peticiones a `/api/*` se proxean a FastAPI
 en `http://localhost:8080` (levantar la API por separado o con Docker Compose).
 
+### Chat en vivo
+
+1. Configura `LLM_API_KEY` en `agenteia-expert/.env` (gateway `ia.iamiko.cl`).
+2. Levanta la API: `uvicorn app.main:app --reload --port 8080` desde `agenteia-expert/`.
+3. En `/chat`, los mensajes se envían a `POST /agents/{slug}/chat` con streaming SSE.
+
+Para volver al mock kubectl local:
+
+```bash
+VITE_USE_DEMO_CHAT=true npm run dev
+```
+
 ## Calidad
 
 ```bash

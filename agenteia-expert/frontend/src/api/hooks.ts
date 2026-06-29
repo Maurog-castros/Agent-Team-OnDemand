@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api, ApiError } from './client'
 import type {
   AgentRead,
   ApiConnectionState,
+  HealthDepsResponse,
   TaskRead,
   TeamRead,
 } from './types'
@@ -13,6 +14,10 @@ interface AsyncState<T> {
   loading: boolean
   error: string | null
 }
+
+const EMPTY_AGENTS: AgentRead[] = []
+const EMPTY_TASKS: TaskRead[] = []
+const EMPTY_TEAMS: TeamRead[] = []
 
 function formatError(error: unknown): string {
   if (error instanceof ApiError) {
@@ -25,6 +30,9 @@ function formatError(error: unknown): string {
 }
 
 function useAsyncData<T>(loader: () => Promise<T>, fallback: T): AsyncState<T> {
+  const fallbackRef = useRef(fallback)
+  fallbackRef.current = fallback
+
   const [state, setState] = useState<AsyncState<T>>({
     data: fallback,
     loading: true,
@@ -44,7 +52,7 @@ function useAsyncData<T>(loader: () => Promise<T>, fallback: T): AsyncState<T> {
       } catch (error) {
         if (active) {
           setState((prev) => ({
-            data: prev.data ?? fallback,
+            data: prev.data ?? fallbackRef.current,
             loading: false,
             error: formatError(error),
           }))
@@ -55,7 +63,7 @@ function useAsyncData<T>(loader: () => Promise<T>, fallback: T): AsyncState<T> {
     return () => {
       active = false
     }
-  }, [loader, fallback])
+  }, [loader])
 
   return state
 }
@@ -81,41 +89,54 @@ export function useApiConnection(): ApiConnectionState & { reload: () => void } 
   }, [])
 
   useEffect(() => {
-    let active = true
-
-    void (async () => {
-      try {
-        const health = await api.health()
-        if (active) {
-          setState({ connected: health.status === 'ok', health, error: null })
-        }
-      } catch (error) {
-        if (active) {
-          setState({
-            connected: false,
-            health: null,
-            error: formatError(error),
-          })
-        }
-      }
-    })()
-
-    return () => {
-      active = false
-    }
-  }, [])
+    void reload()
+  }, [reload])
 
   return { ...state, reload }
 }
 
-export function useAgents(fallback: AgentRead[] = []) {
-  return useAsyncData(() => api.listAgents(), fallback)
+export function useAgents(fallback: AgentRead[] = EMPTY_AGENTS) {
+  const load = useCallback(() => api.listAgents(), [])
+  return useAsyncData(load, fallback)
 }
 
-export function useTasks(fallback: TaskRead[] = []) {
-  return useAsyncData(() => api.listTasks(), fallback)
+export function useTasks(fallback: TaskRead[] = EMPTY_TASKS) {
+  const load = useCallback(() => api.listTasks(), [])
+  return useAsyncData(load, fallback)
 }
 
-export function useTeams(fallback: TeamRead[] = []) {
-  return useAsyncData(() => api.listTeams(), fallback)
+export function useTeams(fallback: TeamRead[] = EMPTY_TEAMS) {
+  const load = useCallback(() => api.listTeams(), [])
+  return useAsyncData(load, fallback)
+}
+
+export function useHealthDeps() {
+  const [state, setState] = useState<{
+    data: HealthDepsResponse | null
+    loading: boolean
+    error: string | null
+  }>({
+    data: null,
+    loading: true,
+    error: null,
+  })
+
+  const reload = useCallback(async () => {
+    try {
+      const data = await api.healthDeps()
+      setState({ data, loading: false, error: null })
+    } catch (error) {
+      setState({ data: null, loading: false, error: formatError(error) })
+    }
+  }, [])
+
+  useEffect(() => {
+    void reload()
+    const interval = window.setInterval(() => {
+      void reload()
+    }, 30_000)
+    return () => window.clearInterval(interval)
+  }, [reload])
+
+  return { ...state, reload }
 }

@@ -1,0 +1,15 @@
+[Unit]
+Description=AgenteIA Expert Portal (estático + proxy /api)
+After=network.target agenteia-api.service
+Requires=agenteia-api.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mauro/Dev/Agent-Team-OnDemand/agenteia-expert
+Environment=PORTAL_API_URL=http://127.0.0.1:8092
+ExecStart=/home/mauro/Dev/Agent-Team-OnDemand/agenteia-expert/.venv/bin/uvicorn deploy.portal_proxy:app --host 127.0.0.1 --port 8093
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

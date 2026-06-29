@@ -2,6 +2,45 @@ export interface HealthResponse {
   status: string
 }
 
+export type ServiceStatus = 'ok' | 'offline' | 'unconfigured' | 'degraded'
+
+export interface ServiceHealth {
+  status: ServiceStatus
+  detail: string
+  latency_ms: number | null
+}
+
+export interface HealthDepsResponse {
+  api: ServiceHealth
+  llm: ServiceHealth
+  hermes: ServiceHealth
+  database: ServiceHealth
+  redis: ServiceHealth
+}
+
+export interface ChatMessagePayload {
+  role: 'user' | 'assistant' | 'system'
+  content: string
+}
+
+export interface ChatRequest {
+  messages: ChatMessagePayload[]
+  stream?: boolean
+}
+
+export interface ChatResponse {
+  content: string
+  model: string
+  agent_slug: string
+}
+
+export type ChatStreamEventType = 'token' | 'done' | 'error'
+
+export interface ChatStreamEvent {
+  type: ChatStreamEventType
+  content?: string
+}
+
 export interface AgentRead {
   id: string
   name: string

@@ -1,6 +1,6 @@
 .shell {
   display: grid;
-  grid-template-columns: 16rem 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
   min-height: 100vh;
   background: var(--color-bg);
 }
@@ -12,7 +12,7 @@
   z-index: 100;
   padding: 0.5rem 1rem;
   background: var(--color-accent);
-  color: var(--color-bg);
+  color: #fff;
   border-radius: var(--radius-sm);
   font-weight: 600;
 }
@@ -24,40 +24,24 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.25rem 1rem;
+  gap: 0.75rem;
+  padding: 0.85rem 0.65rem;
   border-right: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg-elevated);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-
-.brandMark {
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.85rem;
+  gap: 0.55rem;
+  padding: 0.25rem 0.45rem 0.65rem;
 }
 
 .brandTitle {
   margin: 0;
   font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.brandSubtitle {
-  margin: 0.15rem 0 0;
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  letter-spacing: -0.01em;
 }
 
 .navList {
@@ -66,83 +50,154 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.15rem;
 }
 
 .navLink {
-  display: block;
-  padding: 0.55rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.6rem;
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   font-weight: 500;
+  font-size: 0.84rem;
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.12s, color 0.12s;
+  border-left: 3px solid transparent;
+}
+
+.navIcon {
+  width: 1rem;
+  text-align: center;
+  font-size: 0.82rem;
+  opacity: 0.85;
 }
 
 .navLink:hover {
-  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  background: var(--color-surface-hover);
   color: var(--color-text);
 }
 
 .navLink:focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline-offset: 1px;
 }
 
 .navLinkActive {
-  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
-  color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: #fecaca;
+  font-weight: 600;
+  border-left-color: var(--color-accent);
 }
 
-.apiStatus {
+.userCard {
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 0.45rem;
+  border-top: 1px solid var(--color-border-subtle);
 }
 
-.apiError {
-  margin: 0.5rem 0 0;
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
+.userAvatar {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: #fca5a5;
+  font-size: 0.62rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  min-width: 0;
+}
+
+.userName {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userEmail {
+  margin: 0;
+  font-size: 0.66rem;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.66rem;
+  color: var(--color-success);
+}
+
+.userStatusDot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--color-success);
 }
 
 .mainColumn {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 100vh;
 }
 
 .main {
   flex: 1;
-  padding: 1.5rem clamp(1rem, 3vw, 2rem) 5rem;
+  padding: 1.25rem 1.5rem;
+  padding-bottom: calc(var(--status-bar-height) + 1rem);
   outline: none;
+  overflow-y: auto;
+}
+
+.mainFull {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  outline: none;
+  overflow: hidden;
 }
 
 .mobileNav {
   display: none;
   position: fixed;
-  bottom: 0;
+  bottom: var(--status-bar-height);
   left: 0;
   right: 0;
   z-index: 20;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.25rem;
-  padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
-  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
-  backdrop-filter: blur(8px);
+  gap: 0.125rem;
+  padding: 0.25rem 0.35rem;
+  background: var(--color-bg-elevated);
   border-top: 1px solid var(--color-border);
 }
 
 .mobileLink {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
-  padding: 0.25rem;
+  min-height: 2.5rem;
+  padding: 0.2rem;
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
   text-decoration: none;
 }
@@ -153,8 +208,8 @@
 }
 
 .mobileLinkActive {
-  color: var(--color-accent);
-  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  color: #fca5a5;
+  background: var(--color-accent-soft);
 }
 
 @media (max-width: 900px) {
@@ -171,13 +226,6 @@
   }
 
   .main {
-    padding-bottom: 5.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .mobileNav {
-    grid-template-columns: repeat(4, 1fr);
-    overflow-x: auto;
+    padding-bottom: calc(var(--status-bar-height) + 3.5rem);
   }
 }

@@ -1,22 +1,24 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 
-import { useApiConnection } from '../../api/hooks'
-import { StatusBadge } from '../common/StatusBadge'
+import { Logo } from '../brand/Logo'
 import styles from './AppShell.module.css'
+import { StatusBar } from './StatusBar'
 
 const NAV_ITEMS = [
-  { to: '/chat', label: 'Chat', short: 'Chat' },
-  { to: '/', label: 'Dashboard', short: 'Inicio', end: true },
-  { to: '/agents', label: 'Agentes', short: 'Agentes' },
-  { to: '/workspaces', label: 'Workspaces', short: 'WS' },
-  { to: '/meetings', label: 'Reuniones', short: 'Meet' },
-  { to: '/tasks', label: 'Tareas', short: 'Tasks' },
-  { to: '/tools', label: 'Herramientas', short: 'Tools' },
-  { to: '/system', label: 'Sistema', short: 'Sys' },
+  { to: '/chat', label: 'Chat', short: 'Chat', icon: '💬' },
+  { to: '/', label: 'Dashboard', short: 'Inicio', end: true, icon: '▦' },
+  { to: '/agents', label: 'Agentes', short: 'Agentes', icon: '◎' },
+  { to: '/workspaces', label: 'Workspaces', short: 'WS', icon: '▣' },
+  { to: '/reunion', label: 'Reunión', short: 'Grupo', icon: '👥' },
+  { to: '/meetings', label: 'Reuniones', short: 'Meet', icon: '📅' },
+  { to: '/tasks', label: 'Tareas', short: 'Tasks', icon: '☑' },
+  { to: '/tools', label: 'Herramientas', short: 'Tools', icon: '⚙' },
+  { to: '/system', label: 'Sistema', short: 'Sys', icon: '◈' },
 ] as const
 
 export function AppShell() {
-  const { connected, error } = useApiConnection()
+  const location = useLocation()
+  const isChat = location.pathname === '/chat' || location.pathname === '/reunion'
 
   return (
     <div className={styles.shell}>
@@ -26,12 +28,9 @@ export function AppShell() {
 
       <aside className={styles.sidebar} aria-label="Navegación principal">
         <div className={styles.brand}>
-          <span className={styles.brandMark} aria-hidden="true">
-            AE
-          </span>
+          <Logo size={28} />
           <div>
             <p className={styles.brandTitle}>AgenteIA Expert</p>
-            <p className={styles.brandSubtitle}>Control plane</p>
           </div>
         </div>
 
@@ -46,6 +45,9 @@ export function AppShell() {
                     isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
                   }
                 >
+                  <span className={styles.navIcon} aria-hidden="true">
+                    {item.icon}
+                  </span>
                   {item.label}
                 </NavLink>
               </li>
@@ -53,19 +55,30 @@ export function AppShell() {
           </ul>
         </nav>
 
-        <div className={styles.apiStatus}>
-          <StatusBadge
-            label={connected ? 'API conectada' : 'API offline'}
-            variant={connected ? 'success' : 'warning'}
-          />
-          {error ? <p className={styles.apiError}>{error}</p> : null}
+        <div className={styles.userCard}>
+          <div className={styles.userAvatar} aria-hidden="true">
+            MA
+          </div>
+          <div className={styles.userInfo}>
+            <p className={styles.userName}>Mauricio A.</p>
+            <p className={styles.userEmail}>mauro@iamiko.cl</p>
+            <p className={styles.userStatus}>
+              <span className={styles.userStatusDot} aria-hidden="true" />
+              En línea
+            </p>
+          </div>
         </div>
       </aside>
 
       <div className={styles.mainColumn}>
-        <main id="main-content" className={styles.main} tabIndex={-1}>
+        <main
+          id="main-content"
+          className={isChat ? styles.mainFull : styles.main}
+          tabIndex={-1}
+        >
           <Outlet />
         </main>
+        <StatusBar />
       </div>
 
       <nav className={styles.mobileNav} aria-label="Navegación móvil">

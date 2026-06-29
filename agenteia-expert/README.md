@@ -20,6 +20,9 @@ curl http://localhost:8081/
 
 Portal: `http://localhost:8081` · API: `http://localhost:8080/docs`
 
+**Producción:** https://team.maurocastro.cl — ver [`deploy/DEPLOY.md`](./deploy/DEPLOY.md) y Jenkins
+https://jenkins.maurocastro.cl/job/AgenteIA-Team-Deploy/
+
 ## Portal frontend
 
 ```bash
@@ -50,6 +53,7 @@ En Windows PowerShell use `.venv\Scripts\Activate.ps1`.
 
 ## Límites actuales
 
-- Chat web usa respuestas locales hasta conectar runtime Hermes vía FastAPI.
+- Chat web conectado a FastAPI (`POST /agents/{slug}/chat`) y gateway `auto-hermes`.
+  Herramientas kubectl del mock demo requieren `VITE_USE_DEMO_CHAT=true` o adapter Hermes CLI.
 - Los gateways Telegram permanecen deshabilitados hasta configurar tokens.
 - Las tools con efectos externos parten denegadas o requieren aprobación.

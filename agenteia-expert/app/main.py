@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import agents, health, meetings, tasks, teams
+from app.api import agents, chat, group_chat, health, meetings, tasks, teams
 from app.channels.web.placeholder import router as web_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -34,12 +34,17 @@ def create_app() -> FastAPI:
             "http://localhost:5173",
             "http://127.0.0.1:5173",
             "http://localhost:8080",
+            "http://localhost:8081",
+            "https://team.maurocastro.cl",
+            "http://team.maurocastro.cl",
         ],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
     application.include_router(health.router)
+    application.include_router(chat.router)
+    application.include_router(group_chat.router)
     application.include_router(agents.router)
     application.include_router(teams.router)
     application.include_router(meetings.router)

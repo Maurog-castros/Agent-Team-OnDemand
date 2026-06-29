@@ -1,14 +1,15 @@
+import { AgentConfigPanel } from '../components/chat/AgentConfigPanel'
 import { ChatPanel } from '../components/chat/ChatPanel'
-import { PageHeader } from '../components/common/StatusBadge'
+import { useAgentChat } from '../context/useAgentChat'
+import styles from './ChatPage.module.css'
 
 export function ChatPage() {
+  const { agentId } = useAgentChat()
+
   return (
-    <>
-      <PageHeader
-        title="Chat"
-        description="Conversación directa con los agentes. No confundir con el timeline de reuniones."
-      />
+    <div className={styles.layout}>
       <ChatPanel />
-    </>
+      <AgentConfigPanel key={agentId} />
+    </div>
   )
 }

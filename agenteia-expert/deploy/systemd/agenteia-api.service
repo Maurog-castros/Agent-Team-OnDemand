@@ -1,0 +1,14 @@
+[Unit]
+Description=AgenteIA Expert API (producción nativa)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mauro/Dev/Agent-Team-OnDemand/agenteia-expert
+EnvironmentFile=/home/mauro/Dev/Agent-Team-OnDemand/agenteia-expert/.env.native
+ExecStart=/home/mauro/Dev/Agent-Team-OnDemand/agenteia-expert/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8092
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

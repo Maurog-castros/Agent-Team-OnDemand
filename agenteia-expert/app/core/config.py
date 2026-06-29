@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     llm_base_url: str = "https://ia.iamiko.cl/v1"
     llm_api_key: SecretStr = SecretStr("")
     default_model: str = "auto-hermes"
+    llm_request_timeout_seconds: float = 240.0
 
     model_config = SettingsConfigDict(
         env_file=".env",

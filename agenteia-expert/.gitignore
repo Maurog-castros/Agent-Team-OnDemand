@@ -1,4 +1,6 @@
 .env
+.env.native
+frontend/.env.development.local
 .venv/
 __pycache__/
 *.py[cod]
